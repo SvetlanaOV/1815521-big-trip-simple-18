@@ -22,8 +22,6 @@ const generateOfferArray = () => Array.from({
 
 export const offerArray = generateOfferArray();
 
-console.log(offerArray)
-
 const generateOffersByType = (type) => ({
   'type': type,
   'offers': getMultipleRandom(offerArray, 5),
@@ -32,8 +30,6 @@ const generateOffersByType = (type) => ({
 const generateOffersByTypeArray = () => OFFER_TYPES.map(generateOffersByType);
 
 const offersByTypeArray = generateOffersByTypeArray();
-
-console.log(offersByTypeArray)
 
 export const getOffer = (id) => offerArray.filter((element) => element.id === id)[0];
 

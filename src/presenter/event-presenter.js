@@ -29,7 +29,6 @@ export default class EventPresenter {
 
     render(this.eventListComponent, this.eventsContainer);
 
-    //Рендер существующих ивентов
     for (let i = 0; i < this.points.length; i++) {
       const point = this.points[i];
       const destination = this.getDestination(point.destination);
