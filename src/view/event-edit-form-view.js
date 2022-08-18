@@ -24,8 +24,6 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
   const endDate = dateTo !== null ? humanizeDate(dateTo) : '';
   const allOffers = offersByType.offers;
 
-
-
   const offersTemplate = allOffers.map((offer) =>
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offer.id}" type="checkbox" name="event-offer-${type}"
@@ -37,18 +35,6 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
       </label>
     </div>`
   ).join('');
-
-
-  // offers.forEach((offer) => {
-  //   const isChecked = (selectedOfferIds.includes(offer.id));
-
-  //   template += createOfferItemTemplate(offer, isChecked, type);
-  // });
-
-
-  //   const isCheckedTemplate = isChecked ? 'checked' : '';
-
-
 
   return (
     ` <form class="event event--edit" action="#" method="post">
@@ -154,10 +140,8 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
 
           ${offersTemplate}
 
-
           </div>
         </section>
-
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -166,7 +150,7 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
       </section>
     </form>`
   );
-}
+};
 
 export default class EventEditFormView {
   constructor(point, destination, offers, offersByType) {
