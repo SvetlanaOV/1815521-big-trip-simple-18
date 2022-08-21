@@ -6,13 +6,15 @@ import {
 } from '../utils.js';
 
 
-const createEventEditFormTemplate = (point, destination, selectedOffers, offersByType) => {
+const createEventEditFormTemplate = (point, offersByType) => {
 
   const {
     basePrice,
     type,
     dateFrom,
-    dateTo
+    dateTo,
+    destination,
+    offers,
   } = point;
 
   const {
@@ -27,7 +29,7 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
   const offersTemplate = allOffers.map((offer) =>
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offer.id}" type="checkbox" name="event-offer-${type}"
-      ${selectedOffers.some((selectedOffer) => selectedOffer.id === offer.id) ? 'checked' : ''}>
+      ${offers.some((selectedOffer) => selectedOffer.id === offer.id) ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${type}-${offer.id}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
@@ -153,26 +155,27 @@ const createEventEditFormTemplate = (point, destination, selectedOffers, offersB
 };
 
 export default class EventEditFormView {
-  constructor(point, destination, offers, offersByType) {
-    this.point = point;
-    this.destination = destination;
-    this.offers = offers;
+  #element = null;
+  #point = null;
+
+  constructor(point, offersByType) {
+    this.#point = point;
     this.offersByType = offersByType;
   }
 
-  getTemplate() {
-    return createEventEditFormTemplate(this.point, this.destination, this.offers, this.offersByType);
+  get template() {
+    return createEventEditFormTemplate(this.#point, this.offersByType);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
