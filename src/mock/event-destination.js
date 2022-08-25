@@ -1,6 +1,6 @@
 import {
   getRandomInt, getRandomArrayElement
-} from '../utils';
+} from '../utils/common.js';
 
 const DESTINATION_DESCRIPTION = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

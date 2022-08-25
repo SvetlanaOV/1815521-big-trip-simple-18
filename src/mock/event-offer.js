@@ -1,6 +1,6 @@
 import {
   getRandomInt, getRandomArrayElement, getMultipleRandom
-} from '../utils';
+} from '../utils/common.js';
 
 const OFFER_TITLE = [
   'Upgrade to a business class',
