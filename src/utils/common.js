@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 const getRandomInt = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -16,6 +14,4 @@ const getMultipleRandom = (arr, num) => {
   return shuffled.slice(0, num);
 };
 
-const humanizeDate = (date) => dayjs(date).format('D MMM');
-
-export {getRandomInt, getRandomArrayElement, getRandomSubArray, getMultipleRandom, humanizeDate};
+export {getRandomInt, getRandomArrayElement, getRandomSubArray, getMultipleRandom};

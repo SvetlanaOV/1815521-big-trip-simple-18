@@ -1,6 +1,6 @@
 import {
   getRandomInt, getRandomSubArray, getRandomArrayElement
-} from '../utils';
+} from '../utils/common.js';
 
 import dayjs from 'dayjs';
 import { getOffersByType } from './event-offer.js';
