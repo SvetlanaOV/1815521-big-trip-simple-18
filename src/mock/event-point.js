@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { getOffersByType } from './event-offer.js';
 import { getRandomDestination } from './event-destination.js';
 
-
 const EVENT_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const MAX_POINT_COUNT = 5;
