@@ -2,9 +2,9 @@ import {render} from './render.js';
 import SortView from './view/sort-view.js';
 import FilterView from './view/filter-view.js';
 
-import PointModel from './model/points-model.js';
+import PointsModel from './model/points-model.js';
 
-import EventPresenter from './presenter/event-presenter.js';
+import EventPresenter from './presenter/event-route-presenter.js';
 
 const siteMainElement = document.querySelector('.page-main');
 const siteHeaderElement = document.querySelector('.page-header');
@@ -15,7 +15,7 @@ const tripFiltersElement = tripControlsElement.querySelector('.trip-controls__fi
 render(new FilterView(), tripFiltersElement);
 render(new SortView(), tripEventsElement);
 
-const pointModel = new PointModel();
+const pointsModel = new PointsModel();
 
-const eventPresenter = new EventPresenter(tripEventsElement, pointModel);
+const eventPresenter = new EventPresenter(tripEventsElement, pointsModel);
 eventPresenter.init();
