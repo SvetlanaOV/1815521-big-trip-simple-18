@@ -1,11 +1,13 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import {updateItem} from '../utils/common.js';
+import {FilterType} from '../const.js';
 import EventListView from '../view/event-list-view.js';
 
 import EventEmptyListView from '../view/event-empty-list-view.js';
 
 import PointPresenter from './point-presenter.js';
-export default class EventPresenter {
+
+export default class TripPresenter {
   #eventListComponent = new EventListView();
 
   #eventsContainer = null;
@@ -14,6 +16,9 @@ export default class EventPresenter {
   #points = [];
 
   #pointPresenter = new Map();
+
+  #noEventComponent = null;
+  #filterType = FilterType.EVERYTHING;
 
   constructor(eventsContainer, pointsModel) {
     this.#eventsContainer = eventsContainer;
@@ -25,10 +30,10 @@ export default class EventPresenter {
   init = () => {
     render(this.#eventListComponent, this.#eventsContainer);
 
-    this.#renderEventsList();
+    this.#renderPointList();
   };
 
-  #renderEvent = (point) => {
+  #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#eventListComponent.element, this.#pointsModel, this.#handlePointChange, this.#handleModeChange);
     pointPresenter.init(point);
 
@@ -47,23 +52,28 @@ export default class EventPresenter {
   };
 
   #renderNoEvents = () => {
-    render(new EventEmptyListView(), this.#eventsContainer);
+    this.#noEventComponent = new EventEmptyListView(this.#filterType);
+    render(this.#noEventComponent, this.#eventsContainer);
   };
 
-  #renderEvents = () => {
-    this.#points.forEach(this.#renderEvent);
+  #renderPoints = () => {
+    this.#points.forEach(this.#renderPoint);
   };
 
-  #renderEventsList = () => {
+  #renderPointList = () => {
     if (this.#points.length === 0) {
       this.#renderNoEvents();
     }
-    this.#renderEvents();
+    this.#renderPoints();
   };
 
   #clearPointList = () => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
+
+    if (this.#noEventComponent) {
+      remove(this.#noEventComponent);
+    }
   };
 }
 
