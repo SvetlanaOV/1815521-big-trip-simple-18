@@ -1,6 +1,5 @@
 import {render} from './render.js';
 import {generateFilters} from './mock/filter.js';
-import SortView from './view/sort-view.js';
 import FilterView from './view/filter-view.js';
 
 import PointsModel from './model/points-model.js';
@@ -17,9 +16,7 @@ const pointsModel = new PointsModel();
 
 const filters = generateFilters(pointsModel.points);
 
-const tripPresenter = new TripPresenter(tripEventsElement, pointsModel);
-
-render(new SortView(), tripEventsElement);
 render(new FilterView(filters), tripFiltersElement);
 
+const tripPresenter = new TripPresenter(tripEventsElement, pointsModel);
 tripPresenter.init();
