@@ -23,9 +23,10 @@ export default class PointPresenter {
 
   #pointsModel = null;
 
+  #mode = Mode.DEFAULT;
+
   #changeData = null;
   #changeMode = null;
-  #mode = Mode.DEFAULT;
 
   constructor(pointListContainer, pointsModel, changeData, changeMode) {
     this.#pointListContainer = pointListContainer;
