@@ -2,10 +2,8 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {
   humanizeDate
 } from '../utils/event.js';
-import {DESTINATION_NAME} from '../mock/event-destination.js';
-import {offersByTypeArray} from '../mock/event-offer.js';
 
-const createEventEditFormTemplate = (point, offersByType) => {
+const createEventEditFormTemplate = (point, offersByType, allDestinationNames) => {
   const {
     basePrice,
     type,
@@ -18,7 +16,7 @@ const createEventEditFormTemplate = (point, offersByType) => {
   const {
     name,
     description,
-    pictures
+    pictures,
   } = destination;
 
 
@@ -80,8 +78,8 @@ const createEventEditFormTemplate = (point, offersByType) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-2" type="text" name="event-destination" value="${selectedCity}" list="destination-list-2">
     <datalist id="destination-list-2">
-    ${DESTINATION_NAME.map((city) => `
-    <option value="${city}" ${selectedCity === city ? 'selected' : ''}></option>`
+    ${allDestinationNames.map((destinationName) => `
+    <option value="${destinationName.name}" id="${destinationName.id}" ${selectedCity === destinationName.name ? 'selected' : ''}></option>`
   ).join('')}
   </datalist>`;
 
@@ -90,6 +88,7 @@ const createEventEditFormTemplate = (point, offersByType) => {
   return (
     ` <form class="event event--edit" action="#" method="post">
       <header class="event__header">
+
       ${eventTypeTemplate}
 
         <div class="event__field-group  event__field-group--destination">
@@ -134,8 +133,10 @@ const createEventEditFormTemplate = (point, offersByType) => {
           <p class="event__destination-description">${description}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
+
             ${photoTemplate}
-              </div>
+
+            </div>
           </div>
         </section>
       </section>
@@ -144,17 +145,19 @@ const createEventEditFormTemplate = (point, offersByType) => {
 };
 
 export default class EventEditFormView extends AbstractStatefulView{
-  constructor(point, offersByType) {
+  constructor(point, getOffersByType, getDestination, getAllDestinationNames) {
     super();
     this._state = EventEditFormView.parsePointToState(point);
 
-    this.offersByType = offersByType;
+    this.getOffersByType = getOffersByType;
+    this.getDestination = getDestination;
+    this.allDestinationNames = getAllDestinationNames();
 
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createEventEditFormTemplate(this._state, this.offersByType);
+    return createEventEditFormTemplate(this._state, this.getOffersByType(this._state.type), this.allDestinationNames);
   }
 
   static parsePointToState = (point) => ({
@@ -169,13 +172,13 @@ export default class EventEditFormView extends AbstractStatefulView{
 
   #setInnerHandlers = () => {
     Array.from(this.element.querySelectorAll('.event__type-input'))
-      .forEach((eventType) => eventType.addEventListener('click', this.#eventTypeHandler));
+      .forEach((eventType) => eventType.addEventListener('click', this.#pointTypeToggleHandler));
 
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change', this.#eventDestinationInputHandler);
+      .addEventListener('change', this.#pointDestinationInputHandler);
   };
 
-  #eventTypeHandler = (evt) => {
+  #pointTypeToggleHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
@@ -183,13 +186,14 @@ export default class EventEditFormView extends AbstractStatefulView{
     });
   };
 
-  #eventDestinationInputHandler = (evt) => {
+  #pointDestinationInputHandler = (evt) => {
     evt.preventDefault();
-    if (evt.target.value) {
-      this.updateElement({
-        destination: evt.target.value,
-      });
-    }
+    if (!evt.target.value) { return; }
+
+    const id = this.allDestinationNames.filter((element) => element.name === evt.target.value)[0].id;
+    this.updateElement({
+      destination: this.getDestination(id),
+    });
   };
 
   reset = (point) => {

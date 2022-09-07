@@ -33,6 +33,8 @@ export default class PointPresenter {
 
     this.#pointsModel = pointsModel;
     this.getOffersByType = this.#pointsModel.getOffersByType;
+    this.getDestination = this.#pointsModel.getDestination;
+    this.getAllDestinationNames = this.#pointsModel.getAllDestinationNames;
 
     this.#changeData = changeData;
     this.#changeMode = changeMode;
@@ -44,9 +46,8 @@ export default class PointPresenter {
     const prevPointComponent = this.#pointComponent;
     const prevPointEditFormComponent = this.#pointEditFormComponent;
 
-    const offersByType = this.getOffersByType(point.type);
     this.#pointComponent = new EventView(point);
-    this.#pointEditFormComponent = new EventEditFormView(point, offersByType);
+    this.#pointEditFormComponent = new EventEditFormView(point, this.getOffersByType, this.getDestination, this.getAllDestinationNames);
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointEditFormComponent.setFormSubmitHandler(this.#handleFormSubmit);
@@ -79,6 +80,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditFormComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -99,6 +101,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#pointEditFormComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -112,6 +115,7 @@ export default class PointPresenter {
   };
 
   #handleClick = () => {
+    this.#pointEditFormComponent.reset(this.#point);
     this.#replaceFormToPoint();
   };
 }

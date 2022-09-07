@@ -31,8 +31,6 @@ const generateOffersByTypeArray = () => OFFER_TYPES.map(generateOffersByType);
 
 export const offersByTypeArray = generateOffersByTypeArray();
 
-console.log(offersByTypeArray);
-
 export const getOffer = (id) => offerArray.filter((element) => element.id === id)[0];
 
 export const getOffersByType = (type) => offersByTypeArray.filter((element) => element.type === type)[0];
