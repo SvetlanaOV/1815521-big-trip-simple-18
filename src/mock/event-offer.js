@@ -18,7 +18,7 @@ export const generateOffer = (id) => ({
 
 const generateOfferArray = () => Array.from({
   length: 25,
-}, (_, k) => generateOffer(k + 1));
+}, (_, k) => generateOffer(k));
 
 export const offerArray = generateOfferArray();
 

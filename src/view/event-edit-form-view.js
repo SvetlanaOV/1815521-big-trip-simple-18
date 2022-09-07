@@ -2,6 +2,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {
   humanizeDate
 } from '../utils/event.js';
+import {offerArray} from '../mock/event-offer.js';
 
 const createEventEditFormTemplate = (point, offersByType, allDestinationNames) => {
   const {
@@ -54,13 +55,13 @@ const createEventEditFormTemplate = (point, offersByType, allDestinationNames) =
     `);
   };
 
-  const allOffers = offersByType.offers;
+  const eventTypeTemplate = createPointTypeTemplate();
 
-  const eventTypeTemplate = createPointTypeTemplate(allOffers, type);
+  const allOffers = offersByType.offers;
 
   const offersTemplate = allOffers.map((offer) =>
     `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offer.id}" type="checkbox" name="event-offer-${type}"
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offer.id}" data-id="${offer.id}" type="checkbox" name="event-offer-${type}"
     ${offers.some((selectedOffer) => selectedOffer.id === offer.id) ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-${type}-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
@@ -172,13 +173,21 @@ export default class EventEditFormView extends AbstractStatefulView{
 
   #setInnerHandlers = () => {
     Array.from(this.element.querySelectorAll('.event__type-input'))
-      .forEach((eventType) => eventType.addEventListener('click', this.#pointTypeToggleHandler));
+      .forEach((offerType) => offerType.addEventListener('click', this.#offerTypeToggleHandler));
 
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change', this.#pointDestinationInputHandler);
+      .addEventListener('change', this.#destinationInputHandler);
+
+    this.element.querySelector('.event__input--price')
+      .addEventListener('input', this.#priceInputHandler);
+
+    this.element.querySelector('.event__input--time').addEventListener('change', this.#dueDateChangeHandler);
+
+    Array.from(this.element.querySelectorAll('.event__offer-checkbox'))
+      .forEach((eventType) => eventType.addEventListener('change', this.#selectedOffersToggleHandler));
   };
 
-  #pointTypeToggleHandler = (evt) => {
+  #offerTypeToggleHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
@@ -186,7 +195,7 @@ export default class EventEditFormView extends AbstractStatefulView{
     });
   };
 
-  #pointDestinationInputHandler = (evt) => {
+  #destinationInputHandler = (evt) => {
     evt.preventDefault();
     if (!evt.target.value) { return; }
 
@@ -196,10 +205,37 @@ export default class EventEditFormView extends AbstractStatefulView{
     });
   };
 
+  //6.1.5
+  #selectedOffersToggleHandler = () => {
+    const selectedOffers = [];
+
+    Array.from(this.element.querySelectorAll('.event__offer-checkbox'))
+      .forEach((checkbox) => checkbox.checked ? selectedOffers.push(offerArray[Number(checkbox.dataset.id)]) : '');
+
+    this.updateElement({
+      offers: selectedOffers,
+    });
+  };
+
   reset = (point) => {
     this.updateElement(
       EventEditFormView.parsePointToState(point),
     );
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: evt.target.value,
+    });
+  };
+
+  #dueDateChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      dateFrom: evt.target.value,
+      dateTo: evt.target.value,
+    });
   };
 
   _restoreHandlers = () => {
@@ -228,3 +264,4 @@ export default class EventEditFormView extends AbstractStatefulView{
     this._callback.editClick();
   };
 }
+
