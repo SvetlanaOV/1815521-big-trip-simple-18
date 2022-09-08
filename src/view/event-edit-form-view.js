@@ -181,7 +181,8 @@ export default class EventEditFormView extends AbstractStatefulView{
     this.element.querySelector('.event__input--price')
       .addEventListener('input', this.#priceInputHandler);
 
-    this.element.querySelector('.event__input--time').addEventListener('change', this.#dueDateChangeHandler);
+    this.element.querySelector('.event__input--time[name=event-start-time]').addEventListener('change', this.#dueDateChangeHandler);
+    this.element.querySelector('.event__input--time[name=event-end-time]').addEventListener('change', this.#dateToChangeHandler);
 
     Array.from(this.element.querySelectorAll('.event__offer-checkbox'))
       .forEach((eventType) => eventType.addEventListener('change', this.#selectedOffersToggleHandler));
@@ -234,6 +235,12 @@ export default class EventEditFormView extends AbstractStatefulView{
     evt.preventDefault();
     this._setState({
       dateFrom: evt.target.value,
+    });
+  };
+
+  #dateToChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
       dateTo: evt.target.value,
     });
   };
