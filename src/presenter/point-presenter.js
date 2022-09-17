@@ -8,8 +8,6 @@ import {isDatesEqual, isPriceEqual} from '../utils/event.js';
 import EventView from '../view/event-view.js';
 import EventEditFormView from '../view/event-edit-form-view.js';
 
-import EventListItemView from '../view/event-list-item-view.js';
-
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
@@ -60,11 +58,8 @@ export default class PointPresenter {
 
     this.#pointEditFormComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
-    const eventListItemElement = new EventListItemView();
-
     if (prevPointComponent === null || prevPointEditFormComponent === null) {
-      render(this.#pointComponent, eventListItemElement.element);
-      render(eventListItemElement, this.#pointListContainer);
+      render(this.#pointComponent, this.#pointListContainer);
       return;
     }
 
@@ -131,8 +126,6 @@ export default class PointPresenter {
   };
 
   #handleClick = () => {
-    //this.#pointEditFormComponent.reset(this.#point);
-    //this.#replaceFormToPoint();
     this.resetView();
   };
 

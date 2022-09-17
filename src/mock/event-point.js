@@ -17,12 +17,12 @@ const generatePrice = () => getRandomInt(MIN_BASE_PRICE, MAX_BASE_PRICE);
 
 const generateDate = () => {
   const maxDaysGap = 3;
-  const daysGap = getRandomInt(-maxDaysGap, 0);
+  const daysGap = getRandomInt(-maxDaysGap, maxDaysGap);
 
   return dayjs().add(daysGap, 'day').toDate();
 };
 
-export const generatePoint = (id) => {
+const generatePoint = (id) => {
   const type = getRandomArrayElement(EVENT_TYPE);
 
   return {

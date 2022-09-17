@@ -14,7 +14,6 @@ const getEnrichedPoints = () => generatePoints().map((point) => ({
   type: point.type,
 }));
 
-
 export default class PointsModel extends Observable {
   #points = getEnrichedPoints();
 
@@ -38,7 +37,7 @@ export default class PointsModel extends Observable {
     this._notify(updateType, update);
   };
 
-  addTask = (updateType, update) => {
+  addPoint = (updateType, update) => {
     this.#points = [
       update,
       ...this.#points,
