@@ -99,7 +99,6 @@ export default class PointsModel extends Observable {
     });
 
     const generateOffers = () => (this.#offers.filter((element) => element.type === point.type)[0].offers);
-    console.log(generateOffers());
 
     const adaptedPoint = {...point,
       basePrice: point['base_price'],
@@ -108,9 +107,6 @@ export default class PointsModel extends Observable {
       destination: generatePointDestination(),
       offers: generateOffers().filter((offer) => point.offers.indexOf(offer.id) !== -1),
     };
-
-    console.log(point.offers)
-    console.log(adaptedPoint.offers)
 
     // Ненужные ключи мы удаляем
     delete adaptedPoint['base_price'];
