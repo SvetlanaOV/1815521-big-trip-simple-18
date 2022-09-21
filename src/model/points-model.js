@@ -31,6 +31,7 @@ export default class PointsModel extends Observable {
       this.#offers = await this.#pointsApiService.offers;
       this.#destinations = await this.#pointsApiService.destinations;
       this.#points = points.map(this.#adaptToClient);
+      //console.log(points)
     } catch(err) {
       this.#points = [];
       this.#offers = [];
@@ -88,22 +89,28 @@ export default class PointsModel extends Observable {
   };
 
   #adaptToClient = (point) => {
+
+    const destination = this.#destinations.find((element) => element.id === point.destination);
     const generatePointDestination = () => ({
       id: point.destination,
-      name: this.#destinations.filter((element) => element.id === point.destination)[0].name,
-      description: this.#destinations.filter((element) => element.id === point.destination)[0].description,
-      pictures: this.#destinations.filter((element) => element.id === point.destination)[0].pictures,
+      name: destination.name,
+      description: destination.description,
+      pictures: destination.pictures,
     });
 
     const generateOffers = () => (this.#offers.filter((element) => element.type === point.type)[0].offers);
+    console.log(generateOffers());
 
     const adaptedPoint = {...point,
       basePrice: point['base_price'],
       dateFrom: point['date_from'],
       dateTo: point['date_to'],
       destination: generatePointDestination(),
-      offers: generateOffers().filter((offer) => offer.id in point.offers),
+      offers: generateOffers().filter((offer) => point.offers.indexOf(offer.id) !== -1),
     };
+
+    console.log(point.offers)
+    console.log(adaptedPoint.offers)
 
     // Ненужные ключи мы удаляем
     delete adaptedPoint['base_price'];
